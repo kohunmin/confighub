@@ -1,13 +1,42 @@
 {
   "name": "confighub",
   "version": "0.1.0",
-  "private": true,
+  "description": "Unified dashboard for managing AI coding tool configs (Claude Code, Cursor, Windsurf, Devin)",
+  "bin": {
+    "confighub": "./bin/cli.js"
+  },
+  "files": [
+    "app",
+    "components",
+    "hooks",
+    "lib",
+    "types",
+    "public",
+    "bin",
+    "next.config.ts",
+    "tsconfig.json",
+    "postcss.config.mjs",
+    "tailwind.config.ts"
+  ],
   "scripts": {
     "dev": "node node_modules/next/dist/bin/next dev",
     "build": "node node_modules/next/dist/bin/next build",
     "start": "node node_modules/next/dist/bin/next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prepublishOnly": "node node_modules/next/dist/bin/next build"
   },
+  "keywords": [
+    "claude",
+    "cursor",
+    "windsurf",
+    "devin",
+    "mcp",
+    "config",
+    "dashboard",
+    "ai-tools"
+  ],
+  "author": "kohunmin",
+  "license": "MIT",
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "clsx": "^2.1.1",

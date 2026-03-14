@@ -37,6 +37,21 @@ Drag the handle between the sidebar and editor to resize. Width is saved to `loc
 
 ## Getting Started
 
+### Option 1 — Run instantly with npx (no install needed)
+
+```bash
+npx confighub
+```
+
+The first run builds the app (~30 seconds). Subsequent runs start instantly. ConfigHub opens automatically in your browser at [http://localhost:3000](http://localhost:3000).
+
+Use a custom port:
+```bash
+PORT=4000 npx confighub
+```
+
+### Option 2 — Clone and run from source
+
 ```bash
 git clone https://github.com/kohunmin/confighub.git
 cd confighub
@@ -74,7 +89,6 @@ confighub/
 
 ## Roadmap
 
-- [ ] Electron wrapper for native file system access without `npm run dev`
 - [ ] Windsurf MCP config path support (once officially documented)
 - [ ] Project switcher for Rules / Skills sections
 - [ ] Real-time file watching with auto-refresh
