@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ConfigHub
+
+A unified dashboard for managing AI coding tool configurations in one place.
+
+![ConfigHub Screenshot](https://github.com/kohunmin/confighub/raw/main/public/screenshot.png)
+
+## Overview
+
+ConfigHub lets you view, edit, compare, and sync configuration files for **Claude Code**, **Cursor**, **Windsurf**, and **Devin** — all from a single VS Code-style dark UI running locally on your machine.
+
+## Features
+
+### ✏️ Edit
+Browse and edit each tool's config files directly in a Monaco editor (the same editor as VS Code):
+
+| Section | Claude Code | Cursor | Windsurf | Devin |
+|---|---|---|---|---|
+| MCP Servers | `~/Library/Application Support/Claude/claude_desktop_config.json` | `~/.cursor/mcp.json` | — | `~/.config/cognition/config.json` |
+| Agent Rules | `CLAUDE.md` | `.cursor/rules/*.md` | `.windsurf/rules/*.md` | `AGENTS.md` |
+| Skills | `~/.claude/plugins/marketplaces/...` | — | — | `.cognition/skills/` |
+| Settings | `~/.claude/settings.json` | `~/Library/Application Support/Cursor/User/settings.json` | — | — |
+
+### ↕️ Sync
+Copy MCP server configs from one tool to all others with the **↕ Apply All** button. Only the `mcpServers` key is replaced — other keys (like Claude's `preferences`) are preserved.
+
+### ⚠️ Diff Detection
+Yellow warning badges appear on any section where configs differ between tools. Works for both JSON (structural diff) and Markdown (text diff).
+
+### 📊 Compare Panel
+Expand the bottom panel to see a side-by-side table of MCP server differences across all tools, or a Monaco diff editor for Markdown rule files.
+
+### 💾 Auto Backup
+Every save creates a `.bak.timestamp` file next to the original, so you can always roll back.
+
+### ↔️ Resizable Sidebar
+Drag the handle between the sidebar and editor to resize. Width is saved to `localStorage`.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+git clone https://github.com/kohunmin/confighub.git
+cd confighub
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — it redirects automatically to the Claude Code MCP view.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Note:** The app reads and writes real config files on your local filesystem via Next.js API routes. No data leaves your machine.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- **Next.js 14+** (App Router, TypeScript, Tailwind CSS)
+- **Monaco Editor** (`@monaco-editor/react`) — VS Code dark theme
+- **deep-diff** + **diff** — JSON structural diff and unified text diff
+- **gray-matter** — YAML frontmatter parsing for `SKILL.md` files
+- Node.js `fs` in API routes for real file I/O
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+confighub/
+├── app/
+│   ├── tool/[tool]/page.tsx    # Main dashboard page
+│   └── api/                   # File read/write/diff/sync endpoints
+├── components/
+│   ├── layout/                # TopBar, Sidebar
+│   ├── editor/                # Monaco EditorPane
+│   └── diff/                  # DiffBadge, ComparisonPanel
+├── lib/                       # Config paths, reader, writer, diff engine
+├── hooks/                     # useConfig, useDiff
+└── types/                     # Shared TypeScript interfaces
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Roadmap
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Electron wrapper for native file system access without `npm run dev`
+- [ ] Windsurf MCP config path support (once officially documented)
+- [ ] Project switcher for Rules / Skills sections
+- [ ] Real-time file watching with auto-refresh
